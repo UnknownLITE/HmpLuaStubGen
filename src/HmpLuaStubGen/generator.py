@@ -7,7 +7,13 @@ from function_parser import parse
 from io import StringIO
 from pathlib import Path
 
-from models import AsyncMethodInfo, Category, MethodInfo, ParamInfo, ReturnValue
+from HmpLuaStubGen.models import (
+    AsyncMethodInfo,
+    Category,
+    MethodInfo,
+    ParamInfo,
+    ReturnValue,
+)
 
 aliases = {
     "int": "integer",
@@ -292,6 +298,6 @@ def generate_stubs(docs_folder: Path, dist_folder: Path):
 
 
 if __name__ == "__main__":
-    docs_folder = Path("../docs")
-    dist_folder = Path("../dist")
+    docs_folder = Path("../../docs")
+    dist_folder = Path("../../dist")
     generate_stubs(docs_folder, dist_folder)

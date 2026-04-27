@@ -7,8 +7,14 @@ from collections import OrderedDict
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
-from common import base_url
-from models import AsyncMethodInfo, Category, MethodInfo, ParamInfo, ReturnValue
+from HmpLuaStubGen.common import base_url
+from HmpLuaStubGen.models import (
+    AsyncMethodInfo,
+    Category,
+    MethodInfo,
+    ParamInfo,
+    ReturnValue,
+)
 
 SIGNATURE_RE = re.compile(
     r"^(?:(?P<returns>.*?)\s*=)?\s*"  # optional return types
@@ -273,4 +279,4 @@ def parse(filepath: Path | str) -> tuple[str, dict[str, MethodInfo]]:
 if __name__ == "__main__":
     from pprint import pprint
 
-    pprint(parse("../docs/scripting/functions/events.html"))
+    pprint(parse("../../docs/scripting/functions/events.html"))

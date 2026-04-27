@@ -1,6 +1,6 @@
 from pytest import mark
 
-from function_parser import SIGNATURE_RE, PARAM_RE
+from HmpLuaStubGen.function_parser import SIGNATURE_RE, PARAM_RE
 
 
 @mark.parametrize(

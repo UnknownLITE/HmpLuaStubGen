@@ -4,4 +4,13 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "beautifulsoup4>=4.14.3"
+]
+
+[dependency-groups]
+dev = [
+    "rich>=15.0.0",
+    "ruff>=0.15.11",
+    "selenium>=4.43.0",
+]

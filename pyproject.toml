@@ -11,6 +11,6 @@ dependencies = [
 [dependency-groups]
 dev = [
     "rich>=15.0.0",
-    "ruff>=0.15.11",
+    "ruff>=0.15.12",
     "selenium>=4.43.0",
 ]

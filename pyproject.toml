@@ -14,3 +14,11 @@ dev = [
     "ruff>=0.15.12",
     "selenium>=4.43.0",
 ]
+tests = [
+    "pytest>=9.0.3",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src"
+]

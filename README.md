@@ -1,5 +1,10 @@
 # HappinessMP Lua Stub Generator
 
+## Installation
+Extract the .zip file downloaded from Releases into your project folder\
+OR\
+https://luals.github.io/wiki/addons/#installing-addons
+
 ## Showcase:
 ### Natives
 <img width="762" height="134" src="https://github.com/user-attachments/assets/abbc0f2d-c16c-42e2-af71-fb4f3c375af2" />

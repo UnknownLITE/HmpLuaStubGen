@@ -1,6 +1,7 @@
 from pytest import mark
 
 from HmpLuaStubGen.function_parser import SIGNATURE_RE, PARAM_RE
+from HmpLuaStubGen.native_parser import TYPE_INFO_RE
 
 
 @mark.parametrize(
@@ -106,6 +107,51 @@ def test_signature_re(code: str, does_match: bool, groupdict):
 )
 def test_param_re(code: str, does_match: bool, groupdict):
     match = PARAM_RE.match(code)
+    match_found = bool(match)
+    assert match_found == does_match, match.groupdict() if match_found else ""
+
+    if match_found:
+        assert groupdict == match.groupdict()
+
+
+@mark.parametrize(
+    "code, does_match, groupdict",
+    [
+        (
+            "- **bool**",
+            True,
+            {"type": "bool", "name": None, "description": None},
+        ),
+        (
+            "- **bool:** is_ok",
+            True,
+            {"type": "bool", "name": "is_ok", "description": None},
+        ),
+        (
+            "- **int:** type (usually 14)",
+            True,
+            {"type": "int", "name": "type", "description": "(usually 14)"},
+        ),
+        (
+            "- **Vector3*:** src_vector",
+            True,
+            {"type": "Vector3*", "name": "src_vector", "description": None},
+        ),
+        (
+            "- **float&:** intensity",
+            True,
+            {"type": "float&", "name": "intensity", "description": None},
+        ),
+        (
+            "- **Vector3***",
+            True,
+            {"type": "Vector3*", "name": None, "description": None},
+        ),
+        ("", False, None),
+    ],
+)
+def test_native_type_info_re(code: str, does_match: bool, groupdict):
+    match = TYPE_INFO_RE.match(code)
     match_found = bool(match)
     assert match_found == does_match, match.groupdict() if match_found else ""
 

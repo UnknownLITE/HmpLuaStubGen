@@ -313,7 +313,7 @@ def generate_native_stubs(natives_folder: Path):
             continue
         writer.write(f"--#region {folder.name}\n\n")
         for file in folder.iterdir():
-            if not file.is_file():
+            if not file.is_file() or file.name == 'desktop.ini':
                 continue
             native = parse_native(file)
             full_name = f"{class_name}.{file.stem}"

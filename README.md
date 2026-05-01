@@ -1,7 +1,7 @@
 # HappinessMP Lua Stub Generator
 
 ## Showcase:
-### Natives:
+### Natives
 <img width="762" height="134" src="https://github.com/user-attachments/assets/abbc0f2d-c16c-42e2-af71-fb4f3c375af2" />
 
 ### Events

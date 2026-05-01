@@ -204,6 +204,7 @@ def generate_function_stub(writer: StringIO, filepath: Path):
     writer.write("--#endregion\n\n\n")
 
 
+# region Events
 def generate_overloads(
     full_method_name: str, method: MethodInfo, events: dict[str, MethodInfo]
 ):
@@ -295,6 +296,10 @@ def generate_events_stub(
     writer.write("--#endregion\n\n\n")
 
 
+# endregion Events
+
+
+# region Natives
 def generate_native_stubs(natives_folder: Path):
     class_name = "Game"
     writer = StringIO()
@@ -317,6 +322,9 @@ def generate_native_stubs(natives_folder: Path):
         writer.write(f"--#endregion {folder.name}\n\n")
 
     return writer
+
+
+# endregion Natives
 
 
 def generate_stubs(docs_folder: Path, dist_folder: Path):

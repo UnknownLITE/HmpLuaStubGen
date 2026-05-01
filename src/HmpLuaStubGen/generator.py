@@ -3,10 +3,10 @@ from collections import OrderedDict
 from bs4 import BeautifulSoup
 from bs4.element import NavigableString, Tag
 
-from function_parser import parse
 from io import StringIO
 from pathlib import Path
 
+from HmpLuaStubGen.function_parser import parse
 from HmpLuaStubGen.models import (
     AsyncMethodInfo,
     Category,

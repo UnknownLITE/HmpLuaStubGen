@@ -52,7 +52,7 @@ from HmpLuaStubGen.function_parser import SIGNATURE_RE, PARAM_RE
             },
         ),
         (
-            "int status, string data = HTTP.Get(string url)", # shortened version of HTTP.Request just for testing
+            "int status, string data = HTTP.Get(string url)",  # shortened version of HTTP.Request just for testing
             True,
             {
                 "returns": "int status, string data",
@@ -66,11 +66,8 @@ from HmpLuaStubGen.function_parser import SIGNATURE_RE, PARAM_RE
 )
 def test_signature_re(code: str, does_match: bool, groupdict):
     match = SIGNATURE_RE.match(code)
-    if not code.strip():
-        assert not does_match
-        return
     match_found = bool(match)
-    assert match_found == does_match
+    assert match_found == does_match, match.groupdict() if match_found else ""
 
     if match_found:
         assert groupdict == match.groupdict()
@@ -110,7 +107,7 @@ def test_signature_re(code: str, does_match: bool, groupdict):
 def test_param_re(code: str, does_match: bool, groupdict):
     match = PARAM_RE.match(code)
     match_found = bool(match)
-    assert match_found == does_match, match.groupdict()
+    assert match_found == does_match, match.groupdict() if match_found else ""
 
     if match_found:
         assert groupdict == match.groupdict()

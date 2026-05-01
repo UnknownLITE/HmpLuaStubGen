@@ -35,7 +35,7 @@ def _write_single_stub(
     writer: StringIO,
     method_name: str,
     method: MethodInfo,
-    params: dict,
+    params: dict[str, ParamInfo],
     category_label: str | None,
     overloads: list[str] | None = None,
 ) -> None:

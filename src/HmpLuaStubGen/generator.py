@@ -6,8 +6,9 @@ from bs4.element import NavigableString, Tag
 from io import StringIO
 from pathlib import Path
 
-from HmpLuaStubGen.common import aliases
+from HmpLuaStubGen.common import aliases, lua_types, type_map, all_aliases
 from HmpLuaStubGen.function_parser import parse
+from HmpLuaStubGen.native_parser import parse_native
 from HmpLuaStubGen.models import (
     AsyncMethodInfo,
     Category,
@@ -56,10 +57,42 @@ def _write_single_stub(
         writer.write(f"---@param {param_name}")
         if param_info.is_optional:
             writer.write("?")
-        writer.write(f" {param_info.type}\n")
+
+        param_type = param_info.type
+
+        # For Natives
+        if param_type not in lua_types:
+            is_int = not param_type.startswith("fun(") and param_type not in all_aliases
+
+            if is_int:
+                param_type = "integer"
+            else:
+                param_type = type_map.get(param_type, param_type)
+        #
+
+        writer.write(f" {param_type}")
+        if param_info.description:
+            writer.write(f" {param_info.description}")
+        writer.write("\n")
 
     for ret in method.returns:
-        writer.write(f"---@return {ret.type} {ret.name}\n")
+        ret_type = ret.type
+
+        # For Natives
+        if ret_type not in lua_types:
+            is_int = (
+                not ret_type.startswith("fun(")
+                and ret_type not in type_map
+                and ret_type not in aliases
+            )
+
+            if is_int:
+                ret_type = "integer"
+            else:
+                ret_type = type_map.get(ret_type, ret_type)
+        #
+
+        writer.write(f"---@return {ret_type} {ret.name}\n")
 
     if overloads:
         for overload in overloads:
@@ -262,6 +295,30 @@ def generate_events_stub(
     writer.write("--#endregion\n\n\n")
 
 
+def generate_native_stubs(natives_folder: Path):
+    class_name = "Game"
+    writer = StringIO()
+
+    writer.write("---@meta\n\n")
+    writer.write(f"---@class {class_name}\n")
+    writer.write(f"{class_name} = {{}}\n\n")
+
+    for folder in natives_folder.iterdir():
+        if not folder.is_dir():
+            continue
+        writer.write(f"--#region {folder.name}\n\n")
+        for file in folder.iterdir():
+            if not file.is_file():
+                continue
+            native = parse_native(file)
+            full_name = f"{class_name}.{file.stem}"
+            write_method_stub(writer, full_name, native)
+
+        writer.write(f"--#endregion {folder.name}\n\n")
+
+    return writer
+
+
 def generate_stubs(docs_folder: Path, dist_folder: Path):
     dist_folder.mkdir(parents=True, exist_ok=True)
     with open(dist_folder / "aliases.d.lua", "w") as f:
@@ -288,6 +345,10 @@ def generate_stubs(docs_folder: Path, dist_folder: Path):
             docs_folder / "scripting/functions/events.html",
             docs_folder / "scripting/events.html",
         )
+
+    writer = generate_native_stubs(docs_folder / "natives")
+    with open(dist_folder / "natives.d.lua", "w", encoding="utf8") as f:
+        f.write(writer.getvalue())
 
 
 if __name__ == "__main__":

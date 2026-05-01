@@ -13,6 +13,7 @@ class ParamInfo:
     type: str
     is_optional: bool = False
     category: Category = Category.SHARED
+    description: str = ""
 
 
 @dataclass(slots=True)

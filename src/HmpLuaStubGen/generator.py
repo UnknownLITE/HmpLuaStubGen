@@ -39,9 +39,11 @@ def _write_single_stub(
     category_label: str | None,
     overloads: list[str] | None = None,
 ) -> None:
-    writer.write("--- ")
-    writer.write("\n--- ".join(method.description.split("\n")))
-    writer.write(f"\n---\n--- [Open Docs 🔗]({method.doc_link})")
+    if method.description.strip():
+        writer.write("--- ")
+        writer.write("\n--- ".join(method.description.split("\n")))
+        writer.write("\n---\n")
+    writer.write(f"--- [Open Docs 🔗]({method.doc_link})")
 
     if category_label:
         writer.write(f" | {category_label}")

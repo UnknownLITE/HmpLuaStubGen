@@ -6,6 +6,7 @@ from bs4.element import NavigableString, Tag
 from io import StringIO
 from pathlib import Path
 
+from HmpLuaStubGen.common import aliases
 from HmpLuaStubGen.function_parser import parse
 from HmpLuaStubGen.models import (
     AsyncMethodInfo,
@@ -14,16 +15,6 @@ from HmpLuaStubGen.models import (
     ParamInfo,
     ReturnValue,
 )
-
-aliases = {
-    "int": "integer",
-    "uint": "integer",
-    "float": "number",
-    "char": "string",
-    "bool": "boolean",
-    "void": "nil",
-    "list": "any[]",
-}
 
 
 def convert_returns_to_params(returns: list[ReturnValue]) -> dict[str, ParamInfo]:

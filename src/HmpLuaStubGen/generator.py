@@ -267,6 +267,7 @@ def generate_events_stub(
     _, events = parse(events_filepath)
 
     writer.write("---@alias events\n")
+    writer.write('---| string\n')
     for event_name, event in events.items():
         desc = simplify_description(event.description)
         writer.write(f'---| "{event_name}" # {desc}\n')

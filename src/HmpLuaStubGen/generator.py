@@ -267,7 +267,7 @@ def generate_events_stub(
     _, events = parse(events_filepath)
 
     writer.write("---@alias events\n")
-    writer.write('---| string\n')
+    writer.write("---| string\n")
     for event_name, event in events.items():
         desc = simplify_description(event.description)
         writer.write(f'---| "{event_name}" # {desc}\n')
@@ -301,28 +301,29 @@ def generate_events_stub(
 
 
 # region Natives
-def generate_native_stubs(natives_folder: Path):
+def generate_n_write_native_stubs(natives_folder: Path, dist_folder: Path):
     class_name = "Game"
-    writer = StringIO()
 
-    writer.write("---@meta\n\n")
-    writer.write(f"---@class {class_name}\n")
-    writer.write(f"{class_name} = {{}}\n\n")
+    with open(dist_folder / "natives.d.lua", "w", encoding="utf8") as writer:
+        writer.write("---@meta\n\n")
+        writer.write(f"---@class {class_name}\n")
+        writer.write(f"{class_name} = {{}}\n\n")
+
+    stub_folder = dist_folder / "natives"
+    stub_folder.mkdir(exist_ok=True)
 
     for folder in natives_folder.iterdir():
         if not folder.is_dir():
             continue
-        writer.write(f"--#region {folder.name}\n\n")
-        for file in folder.iterdir():
-            if not file.is_file() or file.name == 'desktop.ini':
-                continue
-            native = parse_native(file)
-            full_name = f"{class_name}.{file.stem}"
-            write_method_stub(writer, full_name, native)
-
-        writer.write(f"--#endregion {folder.name}\n\n")
-
-    return writer
+        stub_filepath = stub_folder / (folder.name + ".d.lua")
+        with open(stub_filepath, "w", encoding="utf8") as writer:
+            writer.write("---@meta\n\n")
+            for file in folder.iterdir():
+                if not file.is_file() or file.name == "desktop.ini":
+                    continue
+                native = parse_native(file)
+                full_name = f"{class_name}.{file.stem}"
+                write_method_stub(writer, full_name, native)
 
 
 # endregion Natives
@@ -355,9 +356,7 @@ def generate_stubs(docs_folder: Path, dist_folder: Path):
             docs_folder / "scripting/events.html",
         )
 
-    writer = generate_native_stubs(docs_folder / "natives")
-    with open(dist_folder / "natives.d.lua", "w", encoding="utf8") as f:
-        f.write(writer.getvalue())
+    generate_n_write_native_stubs(docs_folder / "natives", dist_folder)
 
 
 if __name__ == "__main__":
